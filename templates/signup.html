@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/styles/style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <title>Signup</title>
+    </head>
+    <body>
+        <div class="my_container">
+            <div class="center"><h1>Vehicle Parking</h1></div>
+            <div class="my_panel">
+                <div class="center"><h3>Signup</h3></div>
+                <form action="/register" method="POST">
+                <div class="input_form">
+                    <div class="mb-3">
+                        <label for="user_name" class="form-label">User name(E-Mail)</label>
+                        <input type="email" class="form-control" name="user_name" id="user_name" placeholder="example@gmail.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="full_name" class="form-label">Full name</label>
+                        <input type="text" class="form-control" name="full_name" id="full_name" placeholder="Full Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Address</label>
+                        <input type="text" class="form-control" name="location" id="location" placeholder="Hyderabad,TG">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pin_code" class="form-label">Pin code</label>
+                        <input type="text" class="form-control" name="pin_code" id="pin_code" placeholder="506332">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pin_code" class="form-label">Vehicle Model</label>
+                        <input type="text" class="form-control" name="vehicle_model" id="vehicle_model" placeholder="KIA">
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        Existing user?<a href="/login">Login</a>
+                        <div class="center">{{msg}}</div>
+                    </div>
+                </div>
+                </form>
+            </div>
+
+        </div>
+    </body>
+</html>
+ 

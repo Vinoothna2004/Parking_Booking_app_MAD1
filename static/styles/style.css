@@ -1,0 +1,46 @@
+*{
+    margin:0px;
+}
+
+.my_container{
+    border: 2% solid black;
+}
+
+.my_panel{
+    width: 80%;
+    margin: auto;
+    height: auto;
+    border: 1% dashed black;
+}
+
+.input_form{
+    border: 1% solid blue;
+    width: 100%;
+    height: 90%;
+    margin: auto;
+    margin-top: 2%;
+    padding: 10%;
+    border-radius: 10%;
+    font-size: 100%;
+    text-align: justify;
+}
+
+.outer_box{
+    border: 1% solid orange;
+    margin-top:10%;
+    margin: auto;
+    padding: 10%;
+    border-radius: 10%;
+}
+
+.center{
+    text-align: center;
+    margin: auto;
+    color: rgb(5,5,110)
+}
+
+.err_msg{
+    text-align: center;
+    margin: auto;
+    color: maroon;
+}
