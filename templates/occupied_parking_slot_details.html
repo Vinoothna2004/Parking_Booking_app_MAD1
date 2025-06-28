@@ -1,0 +1,40 @@
+{% extends "admin_layout.html" %}
+{% block content %}
+<div class="container mt-4" style="max-width: 500px;">
+  <div class="card shadow">
+    <div class="card-header bg-warning text-center fw-bold">
+      Occupied Parking Spot Details
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label">ID:</label>
+        <input type="text" class="form-control" value="{{ slot.id }}" readonly>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Customer ID:</label>
+        <input type="text" class="form-control" value="{{ reservation.user_id }}" readonly>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Vehicle Number:</label>
+        <input type="text" class="form-control" value="{{ reservation.user_info.vehicle_no }}" readonly>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Date/Time of Parking:</label>
+        <input type="text" class="form-control" value="{{ reservation.parking_timestamp }}" readonly>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Estimated Parking Cost:</label>
+        <input type="text" class="form-control" value="{{ reservation.parking_cost }}" readonly>
+      </div>
+
+      <div class="text-center">
+        <a href="{{ url_for('admin_dashboard', name='Admin') }}" class="btn btn-secondary">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

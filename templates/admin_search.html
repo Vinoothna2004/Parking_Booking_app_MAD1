@@ -1,0 +1,75 @@
+{% extends "admin_dashboard.html" %}
+
+{% block content %}
+  <h2 class="mt-4">Search</h2>
+
+  <form method="POST" class="d-flex align-items-center mb-4">
+    <label class="me-2 fw-bold">Search by</label>
+    <select name="search_by" class="form-select w-auto me-2">
+      <option value="user_id" {% if search_by == 'user_id' %}selected{% endif %}>User ID</option>
+      <option value="location" {% if search_by == 'location' %}selected{% endif %}>Parking Spot by Location</option>
+    </select>
+    <input type="text" name="search_string" class="form-control w-auto me-2" value="{{ query }}" placeholder="Search...">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+
+  {% if results %}
+    {% if search_by == 'user_id' %}
+      <h4>Search result for User ID: {{ query }}</h4>
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Full Name</th>
+            <th>Address</th>
+            <th>Pin Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in results %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.full_name }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.pin_code }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% elif search_by == 'location' %}
+      <h4>Example search parking lots @{{ query }}</h4>
+      <div class="row">
+        {% for lot in results %}
+          <div class="col-md-4 mb-4">
+            <div class="border p-3 rounded">
+              <h5>Parking#{{ lot.id }}</h5>
+              <a href="{{ url_for('edit_parking_lot', lot_id=lot.id) }}">Edit</a> |
+              <form action="{{ url_for('delete_parking_lot', lot_id=lot.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-link p-0">Delete</button>
+              </form>
+              <p class="text-success">
+                (Occupied: 
+                  {{
+                    lot.capacity - lot.slots | selectattr("status.name", "equalto", "Available") | list | length
+                  }}/{{ lot.capacity }})
+              </p>
+              <div>
+                {% for slot in lot.slots %}
+                  {% if slot.status.name == "Occupied" %}
+                    <span class="badge bg-danger">O</span>
+                  {% else %}
+                    <span class="badge bg-success">A</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% elif query %}
+    <p>No results found for "{{ query }}"</p>
+  {% endif %}
+{% endblock %}

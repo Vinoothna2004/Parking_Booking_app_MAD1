@@ -1,0 +1,34 @@
+{% extends "admin_layout.html" %}
+{% block content %}
+<div class="container mt-4" style="max-width: 500px;">
+  <div class="card shadow">
+    <div class="card-header bg-warning text-center fw-bold">
+      View/Delete Parking Spot
+    </div>
+    <div class="card-body">
+      <form method="POST" action="/view_delete_slot/{{ slot.id }}">
+        <div class="mb-3">
+          <label class="form-label">ID:</label>
+          <input type="text" class="form-control" value="{{ slot.id }}" readonly>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Status:</label>
+          <a href="{% if slot.status.name == 'Occupied' %}/occupied_slot_details/{{ slot.id }}{% else %}#{% endif %}" class="btn {% if slot.status.name == 'Occupied' %}btn-danger{% else %}btn-success{% endif %}">
+            {{ slot.status.name[0] }}
+          </a>
+        </div>
+
+        {% if slot.status.name == 'Occupied' %}
+          <p class="text-danger fw-bold">Note: Can't delete an occupied parking spot.</p>
+        {% endif %}
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary me-2" {% if slot.status.name == 'Occupied' %}disabled{% endif %}>Delete</button>
+          <a href="{{ url_for('admin_dashboard', name='Admin') }}" class="btn btn-secondary">Close</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

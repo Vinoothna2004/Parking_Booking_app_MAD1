@@ -1,0 +1,30 @@
+{% extends "user_layout.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h3 class="text-center mb-4">Release the parking spot</h3>
+  <form method="POST">
+    <div class="mb-3">
+      <label>Spot ID :</label>
+      <input type="text" class="form-control" name="spot_id" value="{{ slot.id }}" readonly>
+    </div>
+    <div class="mb-3">
+      <label>Vehicle Number :</label>
+      <input type="text" class="form-control" name="vehicle_number" value="{{ vehicle_no }}" readonly>
+    </div>
+    <div class="mb-3">
+      <label>Parking time :</label>
+      <input type="text" class="form-control" value="{{ parking_time }}" readonly>
+    </div>
+    <div class="mb-3">
+      <label>Releasing time :</label>
+      <input type="text" class="form-control" value="{{ releasing_time }}" readonly>
+    </div>
+    <div class="mb-3">
+      <label>Total cost :</label>
+      <input type="text" class="form-control" name="total_cost" value="{{ total_cost }}" readonly>
+    </div>
+    <button type="submit" class="btn btn-danger">Release</button>
+    <a href="{{ url_for('user_dashboard', id=user_id, name='User') }}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

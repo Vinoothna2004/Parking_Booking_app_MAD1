@@ -1,0 +1,15 @@
+{% extends "admin_dashboard.html" %}
+
+{% block content %}
+  <h2 class="text-center mt-4">Summary shows statistical Charts</h2>
+  <div class="row mt-4">
+    <div class="col-md-6 text-center">
+      <h5>Revenue from each parking lot</h5>
+      <img src="data:image/png;base64,{{ pie_chart }}" class="img-fluid" alt="Revenue Chart">
+    </div>
+    <div class="col-md-6 text-center">
+      <h5>Summary on available and occupied parking lots</h5>
+      <img src="data:image/png;base64,{{ bar_chart }}" class="img-fluid" alt="Slot Summary Chart">
+    </div>
+  </div>
+{% endblock %}

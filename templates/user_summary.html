@@ -1,0 +1,33 @@
+{% extends "user_layout.html" %}
+{% block content %}
+<div class="mt-5">
+  <h3 class="text-center mb-4">Summary on already used parking spots</h3>
+  <canvas id="summaryChart" width="600" height="400"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('summaryChart').getContext('2d');
+  const summaryChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ labels | safe }},
+      datasets: [{
+        label: 'No. of times used',
+        data: {{ data | safe }},
+        backgroundColor: ['#71c7ec', '#99e599', '#f8a5c2', '#f6e58d', '#e056fd'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          stepSize: 1
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

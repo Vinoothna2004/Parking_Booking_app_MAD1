@@ -1,112 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User Dashboard</title>
-    <link rel="stylesheet" href="/static/styles/main.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container-fluid p-3">
-        <!-- Top Bar -->
-        <div class="d-flex justify-content-between align-items-center bg-success text-white p-2 rounded">
-            <div>
-                <strong>Welcome to User</strong>
-            </div>
-            <div>
-                <a href="/edit_profile" class="text-white text-decoration-underline">Edit Profile</a>
-            </div>
-        </div>
+{% extends "user_layout.html" %} <!-- Inherited all nav features -->
+{% block content %}
 
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light my-2">
-            <div class="container-fluid">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/summary">Summary</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-                </ul>
-            </div>
-        </nav>
-
-        <!-- Recent Parking History -->
-        <div class="card mb-4">
-            <div class="card-header text-primary fw-bold">
-                Recent parking history
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered text-center">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Location</th>
-                            <th>Vehicle No</th>
-                            <th>Timestamp</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>120</td>
-                            <td>xxxxx</td>
-                            <td>TN318888</td>
-                            <td>xx-xx-xx</td>
-                            <td><button class="btn btn-sm btn-danger">Release</button></td>
-                        </tr>
-                        <tr>
-                            <td>142</td>
-                            <td>xxxxx</td>
-                            <td>AP310921</td>
-                            <td>xx-xx-xx</td>
-                            <td><button class="btn btn-sm btn-success">Parked Out</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Search Parking -->
-        <div class="mb-4">
-            <form method="GET" action="/search">
-                <label class="form-label fw-bold text-danger">Search parking @location/pin code:</label>
-                <input type="text" class="form-control d-inline w-auto" name="search_query" value="Dadar Road">
-                <button class="btn btn-primary ms-2">Search</button>
-            </form>
-        </div>
-
-        <!-- Parking Lots at Location -->
-        <div class="card">
-            <div class="card-header text-primary fw-bold">
-                Parking Lots @ Dadar Road
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered text-center">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Address</th>
-                            <th>Availability</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>132</td>
-                            <td>K. Gadgil Marg, xxxxx</td>
-                            <td>6</td>
-                            <td><button class="btn btn-sm btn-primary">Book</button></td>
-                        </tr>
-                        <tr>
-                            <td>136</td>
-                            <td>Wadala, xxxxx, xxxx</td>
-                            <td>10</td>
-                            <td><button class="btn btn-sm btn-primary">Book</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+<!-- Recent Parking History -->
+<div class="card mb-4">
+    <div class="card-header text-primary fw-bold">
+        Recent Parking History
     </div>
-</body>
-</html>
+    <div class="card-body">
+        {% if reservations %}
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Location</th>
+                    <th>Vehicle No</th>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in reservations %}
+                <tr>
+                    <td>{{ res.id }}</td>
+                    <td>{{ res.slot.parkinglot.location }}</td>
+                    <td>{{ res.user_info.vehicle_no }}</td>
+                    <td>{{ res.parking_timestamp.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                    <td>
+                        {% if not res.leaving_timestamp %}
+  <a href="{{ url_for('release_parking', reservation_id=res.id) }}" class="btn btn-sm btn-danger">Release</a>
+{% else %}
+  <button class="btn btn-sm btn-success" disabled>Parked Out</button>
+{% endif %}
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No recent parking history.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Search Parking -->
+<!-- <div class="mb-4">
+    <form method="GET" action="/search">
+        <label class="form-label fw-bold text-danger">Search parking @location/pin code:</label>
+        <input type="text" class="form-control d-inline w-auto" name="search_query" placeholder="e.g., Dadar Road" required>
+        <button class="btn btn-primary ms-2">Search</button>
+    </form>
+</div> -->
+<form method="GET" action="/search">
+    <input type="hidden" name="user_id" value="{{ uid }}">
+    <input type="hidden" name="name" value="{{ name }}">
+    <label class="form-label fw-bold text-danger">Search parking @location/pin code:</label>
+    <input type="text" class="form-control d-inline w-auto" name="search_query" placeholder="e.g., Dadar Road" required>
+    <button class="btn btn-primary ms-2">Search</button>
+</form>
+
+
+<!-- Parking Lots at Location -->
+{% if search_results %}
+<div class="card">
+    <div class="card-header text-primary fw-bold">
+        Parking Lots @ {{ location_query }}
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Address</th>
+                    <th>Availability</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lot in search_results %}
+                <tr>
+                    <td>{{ lot.id }}</td>
+                    <td>{{ lot.location }}</td>
+                    <td>{{ lot.slots | selectattr('status.name', 'equalto', 'Available') | list | length }}</td>
+                    <td>
+  <a href="{{ url_for('book_slot', lot_id=lot.id, user_id=uid) }}" class="btn btn-sm btn-primary">Book</a>
+</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
