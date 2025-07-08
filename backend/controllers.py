@@ -6,6 +6,8 @@ from sqlalchemy import func
 from werkzeug.utils import secure_filename
 import matplotlib.pyplot as plt
 from flask import session
+from flask import flash
+
 
 @app.route("/")
 def home():
@@ -221,15 +223,24 @@ def edit_parking_lot(lot_id):
     return render_template("edit_lot.html", lot=lot)
 
 
+
 @app.route("/delete_lot/<int:lot_id>", methods=["POST"])
 def delete_parking_lot(lot_id):
     lot = ParkingLot.query.get_or_404(lot_id)
 
-    
+    # Check for any occupied slots
+    occupied_slots = [slot for slot in lot.slots if slot.status == SlotStatus.Occupied]
+
+    if occupied_slots:
+        flash("Cannot delete lot. Some slots are still occupied.", "error")
+        return redirect(url_for("admin_dashboard", name="Admin"))
+
     db.session.delete(lot)
     db.session.commit()
 
+    flash("Parking lot deleted successfully.", "success")
     return redirect(url_for("admin_dashboard", name="Admin"))
+
 
 
 @app.route("/view_delete_slot/<int:slot_id>", methods=["GET", "POST"])
