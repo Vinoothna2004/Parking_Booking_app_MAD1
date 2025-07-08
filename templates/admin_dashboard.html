@@ -18,7 +18,10 @@
         Delete
       </button>
     </form>
-            <p class="text-success">(Occupied: {{ lot.slots | selectattr('status', 'equalto', 'SlotStatus.Occupied') | list | length }}/{{ lot.capacity }})</p>
+          <p class="text-success">
+          (Occupied: {{ lot.slots | selectattr('status.value', 'equalto',
+          'Occupied') | list | length }}/{{ lot.capacity }})
+        </p>
 
             <div class="d-flex flex-wrap">
   {% for slot in lot.slots %}

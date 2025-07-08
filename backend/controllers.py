@@ -56,7 +56,7 @@ def signup():
 
 
 
-#Common route for admin dashboard
+
 @app.route("/admin/<name>")
 def admin_dashboard(name):
     if "user_id" not in session:
@@ -65,6 +65,8 @@ def admin_dashboard(name):
     session["user_name"] = name
     parkinglots = get_parkinglots()
     return render_template("admin_dashboard.html", name=name, parkinglots=parkinglots)
+
+
 
 
 
@@ -92,6 +94,7 @@ def get_parkinglots():
 
 
 
+
 @app.route("/search")
 def search_parking():
     query = request.args.get("search_query", "")
@@ -100,13 +103,11 @@ def search_parking():
         (ParkingLot.pin_code.ilike(f"%{query}%"))
     ).all()
 
-    # ✅ You need the user ID and name for the dashboard
     user_id = request.args.get("user_id")
     user_name = request.args.get("name")
 
-    # Optional: fallback if not passed
+    
     if not user_id or not user_name:
-        # Try from session if you have it
         user_id = session.get("user_id")
         user_name = session.get("user_name")
 
@@ -150,9 +151,9 @@ def add_parking_lot():
             capacity=capacity
         )
         db.session.add(new_lot)
-        db.session.commit()  # Commit to get new_lot.id
+        db.session.commit()  
 
-        # Auto-generate slots
+    
         for _ in range(capacity):
             new_slot = Slot(
                 status=SlotStatus.Available,
@@ -224,7 +225,7 @@ def edit_parking_lot(lot_id):
 def delete_parking_lot(lot_id):
     lot = ParkingLot.query.get_or_404(lot_id)
 
-    # Delete all slots under this lot too (cascades because of your models)
+    
     db.session.delete(lot)
     db.session.commit()
 
@@ -313,6 +314,8 @@ def release_parking(reservation_id):
     reservation = Reservation.query.get_or_404(reservation_id)
     slot = Slot.query.get(reservation.slot_id)
     user = User_Info.query.get(reservation.user_id)
+    lot = ParkingLot.query.get(slot.parkinglot_id)
+
 
     if request.method == "POST":
         reservation.leaving_timestamp = datetime.now()
@@ -321,8 +324,7 @@ def release_parking(reservation_id):
         duration = reservation.leaving_timestamp - reservation.parking_timestamp
         hours = duration.total_seconds() / 3600
 
-        # Example cost: ₹50 per hour
-        price_per_hour = 50
+        price_per_hour = lot.tkt_price
         cost = round(hours * price_per_hour, 2)
 
         reservation.parking_cost = cost
@@ -335,10 +337,10 @@ def release_parking(reservation_id):
     parking_time = reservation.parking_timestamp.strftime("%Y-%m-%d %H:%M:%S")
     releasing_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Estimate cost (preview)
+    # Estimate cost
     duration = datetime.now() - reservation.parking_timestamp
     hours = duration.total_seconds() / 3600
-    price_per_hour = 50
+    price_per_hour = lot.tkt_price
     cost = round(hours * price_per_hour, 2)
 
     return render_template(
@@ -440,7 +442,7 @@ def admin_summary():
         lot_names.append(f"Lot#{lot.id}")
         lot_revenues.append(total)
 
-    # Prepare chart: Pie
+    # Pie Chart
     fig1 = Figure()
     ax1 = fig1.subplots()
     ax1.pie(lot_revenues, labels=lot_names, autopct='%1.1f%%', startangle=140)
@@ -462,7 +464,7 @@ def admin_summary():
             else:
                 occupied += 1
 
-    # Prepare chart: Bar
+    # Bar Graph
     fig2 = Figure()
     ax2 = fig2.subplots()
     ax2.bar(["Available", "Occupied"], [available, occupied], color=["green", "red"])
