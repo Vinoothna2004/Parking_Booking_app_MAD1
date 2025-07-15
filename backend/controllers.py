@@ -25,6 +25,8 @@ def signin():
                 session["user_name"] = uname
             return redirect(url_for("admin_dashboard",name=uname))
         elif usr and usr.role==1: #Existed and normal user
+            session["user_id"] = usr.id
+            session["user_name"] = uname
             return redirect(url_for("user_dashboard",name=uname,id=usr.id))
         else:
             return render_template("login.html",msg="Invalid user credentials...")
@@ -390,12 +392,13 @@ def user_summary(user_id):
 
     return render_template(
         "user_summary.html",
+        user=user,
         labels=labels,
         data=data,
         name=user.full_name,
-        uid=user.id,
-        user_id=user.id
+        uid=user.id
     )
+
 
 
 
@@ -496,4 +499,67 @@ def admin_summary():
 
     return render_template("admin_summary.html", pie_chart=pie_chart, bar_chart=bar_chart, name="Admin")
 
+
+
+
+@app.route("/edit_profile", methods=["GET", "POST"])
+def edit_profile():
+    # Make sure user is logged in
+    if "user_id" not in session:
+        return redirect(url_for("signin"))
+
+    user_id = session.get("user_id")
+    user = User_Info.query.get_or_404(user_id)
+
+    if request.method == "POST":
+        # Do not update email
+        user.full_name = request.form.get("full_name")
+        user.address = request.form.get("location")
+        user.pin_code = request.form.get("pin_code")
+        user.vehicle_no = request.form.get("vehicle_no")
+        
+        new_password = request.form.get("password")
+        if new_password:
+            user.password = new_password  # Ideally hash it
+
+        db.session.commit()
+        flash("Profile updated successfully!", "success")
+        return redirect(url_for("admin_dashboard", id=user.id, name=user.email))
+
+    return render_template("edit_profile.html", user=user)
+
+
+@app.route("/edit_userprofile", methods=["GET", "POST"])
+def edit_userprofile():
+    # Make sure user is logged in
+    if "user_id" not in session:
+        return redirect(url_for("signin"))
+
+    user_id = session.get("user_id")
+    user = User_Info.query.get_or_404(user_id)
+
+    if request.method == "POST":
+        # Get updated details
+        user.full_name = request.form.get("full_name")
+        user.address = request.form.get("location")
+        user.pin_code = request.form.get("pin_code")
+        user.vehicle_no = request.form.get("vehicle_no")
+        # user.new_password = request.form.get("password")
+
+    
+
+        new_password = request.form.get("password")
+        if new_password:
+            user.password = new_password  # Ideally hash it
+
+        db.session.commit()
+        flash("Profile updated successfully!", "success")
+        return redirect(url_for("user_dashboard", id=user.id, name=user.email))
+
+    return render_template(
+    "edit_userprofile.html",
+    user=user,
+    uid=user.id,
+    name=user.email
+)
 
