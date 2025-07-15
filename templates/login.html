@@ -4,6 +4,25 @@
         <link rel="stylesheet" href="/static/styles/style.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <title>Login</title>
+        <script src="https://kit.fontawesome.com/YOUR_KIT_CODE.js" crossorigin="anonymous"></script>
+
+        <script>
+  function togglePassword() {
+    var passwordInput = document.getElementById("password");
+    var eyeIcon = document.getElementById("eyeIcon");
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+    } else {
+      passwordInput.type = "password";
+    }
+  }
+</script>
+
+<span onclick="togglePassword()">
+  <i id="eyeIcon" class="fas fa-eye"></i>
+</span>
+
+
     </head>
     <body>
         <div class="my_container">
@@ -16,10 +35,25 @@
                         <label for="user_name" class="form-label">User name(E-Mail)</label>
                         <input type="email" class="form-control" name="user_name" id="user_name" placeholder="iitm@study.ac.in">
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" placeholder="password">
-                    </div>
+                    <div class="mb-3 position-relative">
+  <label for="password" class="form-label">Password</label>
+
+  <input type="password" class="form-control" id="password" placeholder="Password">
+
+  <span 
+    class="position-absolute"
+    style="top: 70%; right: 15px; transform: translateY(-50%); cursor: pointer;"
+    onclick="togglePassword()"
+  >
+    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="gray" class="bi bi-eye" viewBox="0 0 16 16">
+      <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8z"/>
+      <path d="M8 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
+    </svg>
+  </span>
+</div>
+
+
+
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Login</button>
                         <div class="d-grid gap-2 col-6 mx-auto">
@@ -33,5 +67,6 @@
             </div>
 
         </div>
+
     </body>
 </html>

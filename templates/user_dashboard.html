@@ -58,6 +58,10 @@
     <input type="text" class="form-control d-inline w-auto" name="search_query" placeholder="e.g., Dadar Road" required>
     <button class="btn btn-primary ms-2">Search</button>
 </form>
+{% if message %}
+  <div class="alert alert-warning">{{ message }}</div>
+{% endif %}
+
 
 
 <!-- Parking Lots at Location -->

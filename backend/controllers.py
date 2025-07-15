@@ -104,6 +104,7 @@ def search_parking():
         (ParkingLot.location.ilike(f"%{query}%")) | 
         (ParkingLot.pin_code.ilike(f"%{query}%"))
     ).all()
+    
 
     user_id = request.args.get("user_id")
     user_name = request.args.get("name")
@@ -116,6 +117,10 @@ def search_parking():
     reservations = Reservation.query.filter_by(user_id=user_id).all()
     parkinglots = get_parkinglots()
 
+    message = ""
+    if not results:
+        message = "No parking lots found for your search."
+
     return render_template(
         "user_dashboard.html",
         search_results=results,
@@ -124,7 +129,9 @@ def search_parking():
         name=user_name,
         reservations=reservations,
         parkinglots=parkinglots,
-        user_id=user_id
+        user_id=user_id,
+        message=message
+        
     )
 
 
@@ -429,7 +436,7 @@ def admin_search():
         "admin_search.html",
         results=results,
         query=query,
-        search_by=search_by
+        search_by=search_by,
     )
 
 
