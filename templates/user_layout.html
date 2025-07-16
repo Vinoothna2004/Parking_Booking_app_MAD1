@@ -23,8 +23,12 @@
                         <a class="nav-link" href="{{ url_for('user_summary', user_id=uid) }}">Summary</a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('edit_userprofile') }}">Edit Profile</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="{{ url_for('edit_userprofile') }}">Edit Profile</a></li>
+                </ul> -->
                 </ul>
+        <ul class="navbar-nav mb-2 mb-lg-0 nav-right">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('edit_userprofile') }}">Edit Profile</a></li>
+        </ul>
             </div>
         </nav>
         {%block content%}
