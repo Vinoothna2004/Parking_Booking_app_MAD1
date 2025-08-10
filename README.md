@@ -1,5 +1,5 @@
 # Parking_app_MAD1 
-this is my parking app using  flask , html, css, jinja template
+this is my parking booking app using  flask , html, css, jinja2 template, sqlite
 
 
 Admin login:
