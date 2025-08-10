@@ -6,8 +6,4 @@ Admin login:
 admin@gmail.com
 password: Admin123
 
-User login:
-vinoothna@gmail.com
-password: Vinoothna123
-
 
